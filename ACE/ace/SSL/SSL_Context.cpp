@@ -23,6 +23,7 @@
 
 #include <openssl/x509.h>
 #include <openssl/err.h>
+#include <openssl/objects.h>
 #include <openssl/rand.h>
 #include <openssl/safestack.h>
 
@@ -663,6 +664,26 @@ ACE_SSL_Context::dh_params (const char *file_name,
       }
     DH_free (ret);
   }
+
+  return 0;
+}
+
+int ACE_SSL_Context::set_ecdh_curve(const char * curve_name)
+{
+  int nid;
+
+  nid = OBJ_sn2nid(curve_name);
+  if (nid == NID_undef)
+    return -1;
+
+  EC_KEY * ecdh = EC_KEY_new_by_curve_name (nid);
+  if (ecdh == 0)
+    return -1;
+
+  int ret = SSL_CTX_set_tmp_ecdh (this->context_, ecdh);
+  EC_KEY_free (ecdh);
+  if (1 != ret)
+    return -1;
 
   return 0;
 }

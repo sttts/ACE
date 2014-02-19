@@ -344,6 +344,11 @@ public:
   int dh_params_file_type () const;
   //@}
 
+  /**
+   * @name Elliptic-Curves-Diffie-Hellmann (ECDH) Parameters
+   */
+  int set_ecdh_curve(const char * curve_name);
+
 private:
 
   /// Verify if the context has been initialized or not.

@@ -421,6 +421,10 @@ ACE_TMAIN (int argc, ACE_TCHAR *argv[])
   context->certificate ("./dummy.pem", SSL_FILETYPE_PEM);
   context->private_key ("./key.pem", SSL_FILETYPE_PEM);
 
+  if (context->set_ecdh_curve ("prime256v1") != 0) {
+    ACE_ERROR ((LM_ERROR, "Could not set the ecdh curve\n"));
+  }
+
   u_short port = ACE_DEFAULT_SERVER_PORT;
 
   if (argc > 1)
