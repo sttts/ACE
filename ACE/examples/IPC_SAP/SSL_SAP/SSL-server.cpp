@@ -425,6 +425,10 @@ ACE_TMAIN (int argc, ACE_TCHAR *argv[])
     ACE_ERROR ((LM_ERROR, "Could not set the ecdh curve\n"));
   }
 
+  if (context->dh_params("dh-2048.pem", SSL_FILETYPE_PEM) != 0) {
+    ACE_ERROR ((LM_ERROR, "Could not load dh_params\n"));
+  }
+
   // proposed list from: https://community.qualys.com/blogs/securitylabs/2013/08/05/configuring-apache-nginx-and-openssl-for-forward-secrecy
   const char * cipher_list1_with_rc4 = "EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA+SHA384:EECDH+ECDSA+SHA256:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH+aRSA+RC4:EECDH:EDH+aRSA:RC4:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS";
   const char * cipher_list1_without_rc4 = "EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA+SHA384:EECDH+ECDSA+SHA256:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH+aRSA+RC4:EECDH:EDH+aRSA:RC4:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS:!RC4";
