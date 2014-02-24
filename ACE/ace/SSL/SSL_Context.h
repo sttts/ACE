@@ -349,6 +349,14 @@ public:
    */
   int set_ecdh_curve(const char * curve_name);
 
+  /**
+   * Set the list of ciphers allowed to be used.
+   * The syntax of the cipher list string is described in 
+   * the ciphers(1) man page.
+   */
+  int set_cipher_list(const char * list);
+  int prefer_server_cipher_list(bool on);
+
 private:
 
   /// Verify if the context has been initialized or not.

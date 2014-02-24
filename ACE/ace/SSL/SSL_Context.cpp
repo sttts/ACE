@@ -688,6 +688,27 @@ int ACE_SSL_Context::set_ecdh_curve(const char * curve_name)
   return 0;
 }
 
+int ACE_SSL_Context::set_cipher_list(const char * list)
+{
+  if (SSL_CTX_set_cipher_list(this->context_, list) == 0)
+    return -1;
+  return 0;
+}
+
+int ACE_SSL_Context::prefer_server_cipher_list(bool on)
+{
+  if (on) {
+    long options = SSL_CTX_set_options(this->context_, SSL_OP_CIPHER_SERVER_PREFERENCE);
+    if (options & SSL_OP_CIPHER_SERVER_PREFERENCE == 0)
+      return -1;
+  } else {
+    long options = SSL_CTX_clear_options(this->context_, SSL_OP_CIPHER_SERVER_PREFERENCE);
+    if (options & SSL_OP_CIPHER_SERVER_PREFERENCE != 0)
+      return -1;
+  }
+  return 0;
+}
+
 // ****************************************************************
 
 #if defined (ACE_HAS_EXPLICIT_STATIC_TEMPLATE_MEMBER_INSTANTIATION)

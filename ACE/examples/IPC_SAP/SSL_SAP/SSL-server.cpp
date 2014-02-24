@@ -425,6 +425,24 @@ ACE_TMAIN (int argc, ACE_TCHAR *argv[])
     ACE_ERROR ((LM_ERROR, "Could not set the ecdh curve\n"));
   }
 
+  // proposed list from: https://community.qualys.com/blogs/securitylabs/2013/08/05/configuring-apache-nginx-and-openssl-for-forward-secrecy
+  const char * cipher_list1_with_rc4 = "EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA+SHA384:EECDH+ECDSA+SHA256:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH+aRSA+RC4:EECDH:EDH+aRSA:RC4:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS";
+  const char * cipher_list1_without_rc4 = "EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA+SHA384:EECDH+ECDSA+SHA256:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH+aRSA+RC4:EECDH:EDH+aRSA:RC4:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS:!RC4";
+  const char * cipher_list1_with_rc4_for_ie = "EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA+SHA384:EECDH+ECDSA+SHA256:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH+aRSA+RC4:EECDH:EDH+aRSA:RC4:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS:+RC4:RC4";
+
+  // proposed list from: https://hynek.me/articles/hardening-your-web-servers-ssl-ciphers/
+  const char * cipher_list2 = "ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS";
+
+  // proposed list from: http://vincent.bernat.im/en/blog/2011-ssl-perfect-forward-secrecy.html
+  const char * cipher_list3 = "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-RC4-SHA:ECDHE-RSA-AES128-SHA:RC4:HIGH:!MD5:!aNULL:!EDH";
+
+  if (context->set_cipher_list (cipher_list1_with_rc4_for_ie) != 0) {
+    ACE_ERROR ((LM_ERROR, "Could not set the ciphers list\n"));
+  }
+  if (context->prefer_server_cipher_list(true) != 0) {
+    ACE_ERROR ((LM_ERROR, "Could not set option to prefer server ciphers list\n"));
+  }  
+
   u_short port = ACE_DEFAULT_SERVER_PORT;
 
   if (argc > 1)
